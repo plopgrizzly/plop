@@ -2,9 +2,9 @@ extern crate aci_png;
 #[macro_use]
 extern crate adi_screen;
 
-use adi_screen:: {
+use adi_screen::{
 	Window, Input, Transform, Model, TexCoords, Key,  SpriteList, Text,
-	DEFAULT_FONT, Msg, Sprite
+	DEFAULT_FONT, Msg, Sprite, WindowBuilder
 };
 
 use std::f32::consts::PI;
@@ -94,9 +94,9 @@ fn read_input(context: &mut Context, input: Input) -> bool {
 }
 
 fn main() {
-	let mut window = Window::new("Physics Test", &aci_png::decode(
-		include_bytes!("res/plopgrizzly.png")).unwrap(),
-		(0.05, 0.05, 1.0), None);
+	let mut window = WindowBuilder::new("Physics Test", None)
+		.background((0.05, 0.05, 1.0))
+		.finish();
 
 	let textures = textures!(&mut window, aci_png::decode,
 		"res/box.png",

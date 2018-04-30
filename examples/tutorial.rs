@@ -3,8 +3,8 @@ extern crate aci_png;
 extern crate adi_screen;
 
 use adi_screen::{
-	Window, Input, Transform, Model, TexCoords, Key,  SpriteList, Text,
-	DEFAULT_FONT, Msg, Sprite, WindowBuilder
+	Window, Input, Transform, ModelBuilder, TexCoords, Key,  SpriteList,
+	Text, Msg, Sprite, WindowBuilder
 };
 
 use std::f32::consts::PI;
@@ -85,7 +85,7 @@ fn read_input(context: &mut Context, input: Input) -> bool {
 		}
 		Input::Resize => {
 			context.text.update(&mut context.window,
-				"Physics Test\n", DEFAULT_FONT);
+				"Physics Test\n", None);
 		}
 		_ => {},
 	}
@@ -95,7 +95,7 @@ fn read_input(context: &mut Context, input: Input) -> bool {
 
 fn main() {
 	let mut window = WindowBuilder::new("Physics Test", None)
-		.background((0.05, 0.05, 1.0))
+		.background(0.05, 0.05, 1.0)
 		.finish();
 
 	let textures = textures!(&mut window, aci_png::decode,
@@ -103,8 +103,8 @@ fn main() {
 		"res/ball.png"
 	);
 
-	let block_model = Model::new(&mut window, include!("res/block.data"));
-	let block_tc = TexCoords::new(&mut window, &include!("res/block.texc"));
+	let block_model = include!("res/block.data").finish(&mut window);
+	let block_tc = TexCoords::new(&mut window, include!("res/block.texc"));
 
 	let sprites = SpriteList::new(block_model)
 		.transform(Transform::new().translate(0.0, -0.5, 2.0))

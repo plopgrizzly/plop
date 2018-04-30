@@ -4,5 +4,5 @@ version = "0.1.0"
 authors = ["Brandon Ly <wowbob396@gmail.com>", "Jeron Lau <jeron.lau@plopgrizzly.com>"]
 
 [dependencies]
-adi_screen = { path = "../adi_screen" } # "^0.7"
+adi_screen = { path = "../adirepos/adi_screen" } # "^0.7"
 aci_png = "^0.6"

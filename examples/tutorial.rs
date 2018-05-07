@@ -4,7 +4,7 @@ extern crate adi_screen;
 
 use adi_screen::{
 	Window, Input, Transform, ModelBuilder, TexCoords, Key,  SpriteList,
-	Text, Msg, Sprite, WindowBuilder
+	Text, Msg, Sprite, WindowBuilder, Mat4
 };
 
 use std::f32::consts::PI;
@@ -84,8 +84,8 @@ fn read_input(context: &mut Context, input: Input) -> bool {
 					&mut context.sprites[0]);
 		}
 		Input::Resize => {
-			context.text.update(&mut context.window,
-				"Physics Test\n", None);
+			context.text.update(&mut context.window, "Test", None);
+//				"Physics Test\n", None);
 		}
 		_ => {},
 	}

@@ -108,7 +108,7 @@ fn main() {
 
 	let sprites = SpriteList::new(block_model)
 		.transform(Transform::new().translate(0.0, -0.5, 2.0))
-		.texture(&mut window, textures[0], block_tc).to_vec();
+		.texture(&mut window, &textures[0], block_tc).to_vec();
 
 	let mut context = Context {
 		text: Text::new(&mut window, (-1.0, -1.0), (0.25, 0.125)),

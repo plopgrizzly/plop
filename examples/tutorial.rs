@@ -8,7 +8,7 @@ use rust_physics_engine::{
 };
 
 use adi_screen::{
-	Input, Transform, Key, Text, Msg, Sprite, IDENTITY
+	Input, Transform, Text, Sprite, IDENTITY
 };
 
 use std::f32::consts::PI;
@@ -34,52 +34,52 @@ fn read_input(context: &mut Context, input: Input) -> bool {
 	let t = context.window.window().since();
 
 	match input {
-		Input::Msg(Msg::Back) | Input::Msg(Msg::Quit) => return true,
-		Input::KeyHold(Key::W) => {
+		Input::Back | Input::Quit => return true,
+		Input::W(Some(_)) => {
 			let x = f32::sin(-2.0 * PI * context.rot.1) * t * MOVE_SPEED;
 			let z = f32::cos(-2.0 * PI * context.rot.1) * t * MOVE_SPEED;
 			context.pos.0 += x;
 			context.pos.2 += z;
 			context.window.window().camera(context.pos, context.rot);
 		},
-		Input::KeyHold(Key::S) => {
+		Input::S(Some(_)) => {
 			let x = f32::sin(-2.0 * PI * context.rot.1) * -t * MOVE_SPEED;
 			let z = f32::cos(-2.0 * PI * context.rot.1) * -t * MOVE_SPEED;
 			context.pos.0 += x;
 			context.pos.2 += z;
 			context.window.window().camera(context.pos, context.rot);
 		},
-		Input::KeyHold(Key::D) => {
+		Input::D(Some(_)) => {
 			let x = f32::sin(-2.0 * PI * (context.rot.1 - 0.25)) * t * MOVE_SPEED;
 			let z = f32::cos(-2.0 * PI * (context.rot.1 - 0.25)) * t * MOVE_SPEED;
 			context.pos.0 += x;
 			context.pos.2 += z;
 			context.window.window().camera(context.pos, context.rot);
 		},
-		Input::KeyHold(Key::A) => {
+		Input::A(Some(_)) => {
 			let x = f32::sin(-2.0 * PI * (context.rot.1 + 0.25)) * t * MOVE_SPEED;
 			let z = f32::cos(-2.0 * PI * (context.rot.1 + 0.25)) * t * MOVE_SPEED;
 			context.pos.0 += x;
 			context.pos.2 += z;
 			context.window.window().camera(context.pos, context.rot);
 		},
-		Input::KeyHold(Key::Space) => {
+		Input::Space(Some(_)) => {
 			context.pos.1 -= t * MOVE_SPEED;
 			context.window.window().camera(context.pos, context.rot);
 		},
-		Input::KeyHold(Key::LShift) | Input::KeyHold(Key::RShift) => {
+		Input::LShift(Some(_)) | Input::RShift(Some(_)) => {
 			context.pos.1 += t * MOVE_SPEED;
 			context.window.window().camera(context.pos, context.rot);
 		},
-		Input::KeyHold(Key::Q) => {
+		Input::Q(Some(_)) => {
 			context.rot.1 += t * LOOK_SPEED;
 			context.window.window().camera(context.pos, context.rot);
 		},
-		Input::KeyHold(Key::E) => {
+		Input::E(Some(_)) => {
 			context.rot.1 -= t * LOOK_SPEED;
 			context.window.window().camera(context.pos, context.rot);
 		},
-		Input::KeyHold(Key::R) => {
+		Input::R(Some(_)) => {
 			context.box_r += t * LOOK_SPEED;
 			Transform::new()
 				.rotate(context.box_r, 0.0, 0.0)

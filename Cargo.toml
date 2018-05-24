@@ -1,7 +1,14 @@
+# "rust_physics_engine" crate - Licensed under the MIT LICENSE
+#  * Copyright (c) 2018  Jeron A. Lau <jeron.lau@plopgrizzly.com>
+#  * Copyright (c) 2018  Brandon Ly <wowbob396@gmail.com>
+
 [package]
 name = "rust_physics_engine"
 version = "0.1.0"
-authors = ["Brandon Ly <wowbob396@gmail.com>", "Jeron Lau <jeron.lau@plopgrizzly.com>"]
+authors = [
+	"Brandon Ly <wowbob396@gmail.com>",
+	"Jeron A. Lau <jeron.lau@plopgrizzly.com>"
+]
 
 [dependencies]
 adi_screen = { path = "../adi_screen" } # "^0.7"

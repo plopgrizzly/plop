@@ -1,10 +1,14 @@
+extern crate rust_physics_engine;
 extern crate aci_png;
 #[macro_use]
 extern crate adi_screen;
 
+use rust_physics_engine::{
+	Window,
+};
+
 use adi_screen::{
-	Window, Input, Transform, ModelBuilder, TexCoords, Key,  SpriteList,
-	Text, Msg, Sprite, WindowBuilder, Mat4
+	Input, Transform, Key, Text, Msg, Sprite, IDENTITY
 };
 
 use std::f32::consts::PI;
@@ -21,13 +25,13 @@ struct Context {
 	// Testing Text
 	text: Text,
 	// The sprites in the world
-	sprites: Vec<Sprite>,
+	sprites: [Sprite; 2],
 	// Rotation of the box
 	box_r: f32,
 }
 
 fn read_input(context: &mut Context, input: Input) -> bool {
-	let t = context.window.since();
+	let t = context.window.window().since();
 
 	match input {
 		Input::Msg(Msg::Back) | Input::Msg(Msg::Quit) => return true,
@@ -36,55 +40,55 @@ fn read_input(context: &mut Context, input: Input) -> bool {
 			let z = f32::cos(-2.0 * PI * context.rot.1) * t * MOVE_SPEED;
 			context.pos.0 += x;
 			context.pos.2 += z;
-			context.window.camera(context.pos, context.rot);
+			context.window.window().camera(context.pos, context.rot);
 		},
 		Input::KeyHold(Key::S) => {
 			let x = f32::sin(-2.0 * PI * context.rot.1) * -t * MOVE_SPEED;
 			let z = f32::cos(-2.0 * PI * context.rot.1) * -t * MOVE_SPEED;
 			context.pos.0 += x;
 			context.pos.2 += z;
-			context.window.camera(context.pos, context.rot);
+			context.window.window().camera(context.pos, context.rot);
 		},
 		Input::KeyHold(Key::D) => {
 			let x = f32::sin(-2.0 * PI * (context.rot.1 - 0.25)) * t * MOVE_SPEED;
 			let z = f32::cos(-2.0 * PI * (context.rot.1 - 0.25)) * t * MOVE_SPEED;
 			context.pos.0 += x;
 			context.pos.2 += z;
-			context.window.camera(context.pos, context.rot);
+			context.window.window().camera(context.pos, context.rot);
 		},
 		Input::KeyHold(Key::A) => {
 			let x = f32::sin(-2.0 * PI * (context.rot.1 + 0.25)) * t * MOVE_SPEED;
 			let z = f32::cos(-2.0 * PI * (context.rot.1 + 0.25)) * t * MOVE_SPEED;
 			context.pos.0 += x;
 			context.pos.2 += z;
-			context.window.camera(context.pos, context.rot);
+			context.window.window().camera(context.pos, context.rot);
 		},
 		Input::KeyHold(Key::Space) => {
 			context.pos.1 -= t * MOVE_SPEED;
-			context.window.camera(context.pos, context.rot);
+			context.window.window().camera(context.pos, context.rot);
 		},
 		Input::KeyHold(Key::LShift) | Input::KeyHold(Key::RShift) => {
 			context.pos.1 += t * MOVE_SPEED;
-			context.window.camera(context.pos, context.rot);
+			context.window.window().camera(context.pos, context.rot);
 		},
 		Input::KeyHold(Key::Q) => {
 			context.rot.1 += t * LOOK_SPEED;
-			context.window.camera(context.pos, context.rot);
+			context.window.window().camera(context.pos, context.rot);
 		},
 		Input::KeyHold(Key::E) => {
 			context.rot.1 -= t * LOOK_SPEED;
-			context.window.camera(context.pos, context.rot);
+			context.window.window().camera(context.pos, context.rot);
 		},
 		Input::KeyHold(Key::R) => {
 			context.box_r += t * LOOK_SPEED;
 			Transform::new()
 				.rotate(context.box_r, 0.0, 0.0)
 				.translate(0.0, -0.5, 2.0)
-				.apply(&mut context.window,
+				.apply(&mut context.window.window(),
 					&mut context.sprites[0]);
 		}
 		Input::Resize => {
-			context.text.update(&mut context.window, "Test", None);
+			context.text.update(context.window.window(), "Test", None);
 //				"Physics Test\n", None);
 		}
 		_ => {},
@@ -94,25 +98,23 @@ fn read_input(context: &mut Context, input: Input) -> bool {
 }
 
 fn main() {
-	let mut window = WindowBuilder::new("Physics Test", None)
-		.background(0.05, 0.05, 1.0)
-		.finish();
+	let mut window = rust_physics_engine::Window::new();
 
-	let textures = textures!(&mut window, aci_png::decode,
+	textures!(textures, window.window(), aci_png::decode,
 		"res/box.png",
 		"res/ball.png"
 	);
+	
+	models!(models, window.window(), "res/block.data");
 
-	let block_model = include!("res/block.data").finish(&mut window);
-	let block_tc = TexCoords::new(&mut window, include!("res/block.texc"));
-
-	let sprites = SpriteList::new(block_model)
-		.transform(Transform::new().translate(0.0, -0.5, 2.0))
-		.texture(&mut window, &textures[0], block_tc).to_vec();
+	sprites!(sprites, window.window(), (&models[0], Some(&textures[0]),
+		Transform::new().translate(0.0, -0.5, 2.0), false),
+			(&models[0], Some(&textures[0]),
+		Transform::new().translate(0.0, -4.5, 2.0), false));
 
 	let mut context = Context {
-		text: Text::new(&mut window, (-1.0, -1.0), (0.25, 0.125)),
-		window,
+		text: Text::new(&mut window.window(), (-1.0, -1.0), (0.25, 0.125)),
+		window: window,
 		pos: (0.0, 0.0, 0.0),
 		rot: (0.0, 0.0, 0.0),
 		sprites,
@@ -121,7 +123,7 @@ fn main() {
 
 	'program: loop {
 		// Go through this frame's input.
-		while let Some(input) = context.window.update() {
+		while let Some(input) = context.window.window().update() {
 			if read_input(&mut context, input) {
 				break 'program;
 			}

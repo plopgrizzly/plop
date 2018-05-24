@@ -1,12 +1,18 @@
-ModelBuilder::new()
+model::new() // Start building the model.
+.t(&[ // Texture Coordinates for all faces
+	[0.0, 0.0, 1.0, 1.0], // 4
+	[0.0, 1.0, 1.0, 1.0], // 7
+	[1.0, 1.0, 1.0, 1.0], // 6
+	[1.0, 0.0, 1.0, 1.0], // 5
+])
 .v(&[ // Front
-	[0.5, -0.5, -0.5, 1.0], // 22
-	[0.5, 0.5, -0.5, 1.0], // 17
-	[-0.5, 0.5, -0.5, 1.0], // 19
 	[-0.5, -0.5, -0.5, 1.0], // 23
+	[-0.5, 0.5, -0.5, 1.0], // 19
+	[0.5, 0.5, -0.5, 1.0], // 17
+	[0.5, -0.5, -0.5, 1.0], // 22
 ]).f()
-.m(Mat4::new().rotate(0.25, 0.0, 0.0)).f() // Top
-.m(Mat4::new().rotate(0.50, 0.0, 0.0)).f() // Back
-.m(Mat4::new().rotate(0.75, 0.0, 0.0)).f() // Bottom
-.m(Mat4::new().rotate(0.0, 0.25, 0.0)).f() // Right
-.m(Mat4::new().rotate(0.0, 0.75, 0.0)).f() // Left
+.m(IDENTITY.rotate(0.25, 0.0, 0.0)).f() // Top
+.m(IDENTITY.rotate(0.50, 0.0, 0.0)).f() // Back
+.m(IDENTITY.rotate(0.75, 0.0, 0.0)).f() // Bottom
+.m(IDENTITY.rotate(0.0, 0.25, 0.0)).f() // Right
+.m(IDENTITY.rotate(0.0, 0.75, 0.0)).f() // Left

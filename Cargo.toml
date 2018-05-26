@@ -11,5 +11,5 @@ authors = [
 ]
 
 [dependencies]
-adi_screen = { path = "../adi_screen" } # "^0.7"
+adi_screen = "^0.8"
 aci_png = "^0.6"

@@ -8,7 +8,7 @@ use rust_physics_engine::{
 };
 
 use adi_screen::{
-	Input, Transform, Text, Sprite, IDENTITY
+	Input, Transform, Text, Sprite
 };
 
 use std::f32::consts::PI;
@@ -28,6 +28,8 @@ struct Context {
 	sprites: [Sprite; 2],
 	// Rotation of the box
 	box_r: f32,
+	// Falling box y
+	box_y: f32,
 }
 
 fn read_input(context: &mut Context, input: Input) -> bool {
@@ -41,44 +43,44 @@ fn read_input(context: &mut Context, input: Input) -> bool {
 			context.pos.0 += x;
 			context.pos.2 += z;
 			context.window.window().camera(context.pos, context.rot);
-		},
+		}
 		Input::S(Some(_)) => {
 			let x = f32::sin(-2.0 * PI * context.rot.1) * -t * MOVE_SPEED;
 			let z = f32::cos(-2.0 * PI * context.rot.1) * -t * MOVE_SPEED;
 			context.pos.0 += x;
 			context.pos.2 += z;
 			context.window.window().camera(context.pos, context.rot);
-		},
+		}
 		Input::D(Some(_)) => {
 			let x = f32::sin(-2.0 * PI * (context.rot.1 - 0.25)) * t * MOVE_SPEED;
 			let z = f32::cos(-2.0 * PI * (context.rot.1 - 0.25)) * t * MOVE_SPEED;
 			context.pos.0 += x;
 			context.pos.2 += z;
 			context.window.window().camera(context.pos, context.rot);
-		},
+		}
 		Input::A(Some(_)) => {
 			let x = f32::sin(-2.0 * PI * (context.rot.1 + 0.25)) * t * MOVE_SPEED;
 			let z = f32::cos(-2.0 * PI * (context.rot.1 + 0.25)) * t * MOVE_SPEED;
 			context.pos.0 += x;
 			context.pos.2 += z;
 			context.window.window().camera(context.pos, context.rot);
-		},
+		}
 		Input::Space(Some(_)) => {
 			context.pos.1 -= t * MOVE_SPEED;
 			context.window.window().camera(context.pos, context.rot);
-		},
+		}
 		Input::LShift(Some(_)) | Input::RShift(Some(_)) => {
 			context.pos.1 += t * MOVE_SPEED;
 			context.window.window().camera(context.pos, context.rot);
-		},
+		}
 		Input::Q(Some(_)) => {
 			context.rot.1 += t * LOOK_SPEED;
 			context.window.window().camera(context.pos, context.rot);
-		},
+		}
 		Input::E(Some(_)) => {
 			context.rot.1 -= t * LOOK_SPEED;
 			context.window.window().camera(context.pos, context.rot);
-		},
+		}
 		Input::R(Some(_)) => {
 			context.box_r += t * LOOK_SPEED;
 			Transform::new()
@@ -86,6 +88,13 @@ fn read_input(context: &mut Context, input: Input) -> bool {
 				.translate(0.0, -0.5, 2.0)
 				.apply(&mut context.window.window(),
 					&mut context.sprites[0]);
+		}
+		Input::F(Some(_)) => {
+			context.box_y += t * MOVE_SPEED / 4.0;
+			Transform::new()
+				.translate(0.0, context.box_y, 2.0)
+				.apply(&mut context.window.window(),
+					&mut context.sprites[1]);
 		}
 		Input::Resize => {
 			context.text.update(context.window.window(), "Test", None);
@@ -100,16 +109,17 @@ fn read_input(context: &mut Context, input: Input) -> bool {
 fn main() {
 	let mut window = rust_physics_engine::Window::new();
 
-	textures!(textures, window.window(), aci_png::decode,
+	textures!(window.window(), aci_png::decode,
 		"res/box.png",
 		"res/ball.png"
 	);
 	
-	models!(models, window.window(), "res/block.data");
+	models!(window.window(), "res/block.data");
 
-	sprites!(sprites, window.window(), (&models[0], Some(&textures[0]),
+	let sprites = sprites!(window.window(),
+			(0/*block model*/, Some(0/*box tex*/),
 		Transform::new().translate(0.0, -0.5, 2.0), false),
-			(&models[0], Some(&textures[0]),
+			(0/*block model*/, Some(0/*box tex*/),
 		Transform::new().translate(0.0, -4.5, 2.0), false));
 
 	let mut context = Context {
@@ -118,7 +128,8 @@ fn main() {
 		pos: (0.0, 0.0, 0.0),
 		rot: (0.0, 0.0, 0.0),
 		sprites,
-		box_r: 0.0
+		box_r: 0.0,
+		box_y: -4.5,
 	};
 
 	'program: loop {

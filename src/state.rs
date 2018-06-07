@@ -6,11 +6,12 @@ use Derivative;
 /// values for the RK4 approach
 pub struct State {
 	pub x: f32, // position
-	pub v: f32, // velocity
+	pub dx: f32, // velocity
 }
 pub fn acceleration(x: f32, v: f32, t: f32)
 -> f32
     {
+	// k is the spring force constant
     let k:f32 = 15.0;
     let b:f32 = 0.1;
 
@@ -23,15 +24,16 @@ impl State {
 		-> Derivative
 	{
 		let mut _state: State;
-		_state.x = 0.0;
-		_state.v = 0.0;
-
-		_state.x = initial.x + _d.dx*_dt;
-		_state.v = initial.v + _d.dv*_dt;
+		// initializing the value of the state
+		_state = State {x: initial.x + _d.dx*_dt, dx: initial.dx + _d.dv*_dt};
 
 		let mut _output: Derivative;
-		_output.dx = _state.v;
-		_output.dv = acceleration(_state.x,_state.v,_t+_dt);
+
+		// initializing values of the output struct
+		_output = Derivative {dx: 0.0, dv: 0.0};
+
+		_output.dx = _state.dx;
+		_output.dv = acceleration(_state.x,_state.dx,_t+_dt);
 
 		return _output;
 		unreachable!()

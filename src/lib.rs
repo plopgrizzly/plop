@@ -21,3 +21,8 @@ mod constants {
 	pub const METER: f32 = 1.0;
 	pub const DT: f32 = 1f32/100f32;
 }
+
+// the integration step of the RK4 method
+pub fn integrate(mut state: State,mut t: f32, dt: f32) {
+	
+}

@@ -8,6 +8,7 @@ pub struct State {
 	pub x: f32, // position
 	pub dx: f32, // velocity
 }
+
 pub fn acceleration(x: f32, v: f32, t: f32)
 -> f32
     {
@@ -17,6 +18,7 @@ pub fn acceleration(x: f32, v: f32, t: f32)
 
     return -k *x - b * v;
 }
+
 impl State {
 	/// Evaluates and updates the state and derivatives of an object and
 	/// returns the derivative
@@ -30,7 +32,7 @@ impl State {
 		let mut _output: Derivative;
 
 		// initializing values of the output struct
-		_output = Derivative {dx: 0.0, dv: 0.0};
+		_output = Derivative {dx: _state.dx, dv: acceleration(_state.x,_state.dx,_t+_dt)};
 
 		_output.dx = _state.dx;
 		_output.dv = acceleration(_state.x,_state.dx,_t+_dt);

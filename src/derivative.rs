@@ -5,6 +5,6 @@
 /// This struct will be used to store the derivatives of position and velocity
 /// of for the RK4 approach
 pub struct Derivative {
-	dx: f32, // velocity
-	dv: f32, // acceleration
+	pub dx: f32, // velocity
+	pub dv: f32, // acceleration
 }

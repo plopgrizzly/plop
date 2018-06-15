@@ -1,3 +1,7 @@
+// "rust_physics_engine" crate - Licensed under the MIT LICENSE
+//  * Copyright (c) 2018  Jeron A. Lau <jeron.lau@plopgrizzly.com>
+//  * Copyright (c) 2018  Brandon Ly <wowbob396@gmail.com>
+
 extern crate rust_physics_engine;
 extern crate aci_png;
 #[macro_use]

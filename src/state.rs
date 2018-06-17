@@ -40,6 +40,4 @@ impl State {
 		return _output;
 		unreachable!()
 	}
-
-
 }

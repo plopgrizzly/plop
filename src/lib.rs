@@ -9,6 +9,7 @@ mod dimensions;
 mod derivative;
 mod rigid_body;
 mod state;
+mod kinematics;
 
 pub use window::Window;
 pub use dimensions::Dimensions;
@@ -23,6 +24,6 @@ mod constants {
 }
 
 // the integration step of the RK4 method
-pub fn integrate(mut state: State,mut t: f32, dt: f32) {
+pub fn integrate(_state: State, _t: f32, _dt: f32) {
 	
 }

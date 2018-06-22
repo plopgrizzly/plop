@@ -12,5 +12,6 @@ pub use adi_screen::*;
 pub use Input::*;
 pub use Input;
 pub use World;
+pub use WorldBuilder;
 pub use BBox;
 pub use Object;

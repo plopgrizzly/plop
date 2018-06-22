@@ -92,7 +92,7 @@ fn read_input(context: &mut Context, input: Input) -> bool {
 }
 
 fn main() {
-	let mut world = World::new();
+	let mut world = WorldBuilder::new().finish();
 	set_textures!(world, aci_png::decode,
 		"res/box.png",
 		"res/ball.png"

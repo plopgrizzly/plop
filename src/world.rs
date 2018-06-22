@@ -9,6 +9,7 @@
 use std::rc::Rc;
 use std::cell::{ RefCell, RefMut };
 
+use aci_png;
 use ami::{ Octree, Id };
 use adi_screen::{ Window, WindowBuilder, Sprite };
 use RigidBody;
@@ -50,6 +51,7 @@ impl Object {
 
 /// A 2D GUI element.
 pub struct Overlay {
+	#[allow(unused)] // TODO
 	sprite: Sprite,
 }
 
@@ -121,20 +123,75 @@ pub struct WorldData {
 	octree: Octree<RigidBody>,
 }
 
-/// The 3D world space.
-#[derive(Clone)] pub struct World(Rc<RefCell<WorldData>>);
+/// Builder for World
+pub struct WorldBuilder {
+	name: String,
+	bgc: Vec3,
+	icon: Option<Graphic>,
+	fog: Option<(f32, f32)>,
+}
 
-impl World {
-	/// Create a new window
+impl WorldBuilder {
+	/// Create a new WorldBuilder.
 	pub fn new() -> Self {
-		let window = WindowBuilder::new("Physics Test", None)
-			.background(0.1, 0.1, 0.1)
-			.finish();
+		WorldBuilder {
+			name: "Cala Program".to_string(),
+			bgc: vec3!(0.1, 0.1, 0.1),
+			icon: None,
+			fog: None,
+		}
+	}
+
+	/// Set the window name.
+	pub fn name(mut self, name: &str) -> Self {
+		self.name = name.to_string();
+		self
+	}
+
+	/// Set the background color.
+	pub fn background(mut self, color: Vec3) -> Self {
+		self.bgc = color;
+		self
+	}
+
+	/// Set the window icon
+	pub fn icon(mut self, icon: Graphic) -> Self {
+		self.icon = Some(icon);
+		self
+	}
+
+	/// Set the fog, default is off.
+	pub fn fog(mut self, fog: (f32, f32)) -> Self {
+		self.fog = Some(fog);
+		self
+	}
+
+	/// Create the World and open a window.
+	pub fn finish(mut self) -> World {
+		if self.icon.is_none() {
+			let icon = aci_png::decode(
+				include_bytes!("../icon.png")).unwrap();
+			self.icon = Some(icon);
+		}
+
+		let mut window = WindowBuilder::new(&self.name, self.icon)
+			.background(self.bgc.x, self.bgc.y, self.bgc.z);
+
+		if let Some(fog) = self.fog {
+			window = window.fog(fog.0, fog.1);
+		}
+		
+		let window = window.finish();
 		let octree = Octree::new();
 
 		World(Rc::new(RefCell::new(WorldData { window, octree })))
 	}
+}
 
+/// The 3D world space.
+#[derive(Clone)] pub struct World(Rc<RefCell<WorldData>>);
+
+impl World {
 	/// Change the camera position.
 	pub fn camera(&mut self, pos: Vec3, rot: Vec3) {
 		self.window().window.camera(pos, rot);

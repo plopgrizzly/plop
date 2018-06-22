@@ -14,6 +14,7 @@ use constants;
 
 /// The structure that represents physical objects in the gameworld.
 pub struct RigidBody {
+	#[allow(unused)] // TODO
 	mass: f32,
 	force: Vec3, // (fx, fy, fz)
 	spin: Vec3, // (rx, ry, rz)

@@ -15,6 +15,7 @@
 	html_root_url = "http://plopgrizzly.com/cala/"
 )]
 
+extern crate aci_png; // For loading default icon
 extern crate adi_screen; // For creating a window and drawing
 extern crate ami; // For octree
 
@@ -29,7 +30,7 @@ pub mod prelude;
 
 pub use adi_screen::{ Transform, Input };
 pub use ami::{ BBox };
-pub use world::{ World, Object };
+pub use world::{ World, WorldBuilder, Object };
 pub use derivative::Derivative;
 pub use rigid_body::RigidBody;
 pub use state::State;
@@ -39,7 +40,9 @@ pub use adi_screen::Sprite;
 
 mod constants {
 	pub const GRAVITY: f32 = 9.81;
+	#[allow(unused)] // TODO
 	pub const METER: f32 = 1.0;
+	#[allow(unused)] // TODO
 	pub const DT: f32 = 1.0 / 100.0;
 }
 

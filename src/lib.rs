@@ -11,7 +11,7 @@
 #![warn(missing_docs)]
 #![doc(
 	html_logo_url = "http://plopgrizzly.com/cala/icon.png",
-	html_favicon_url = "http://plopgrizzly.com/cala/icon.png",
+	html_favicon_url = "http://plopgrizzly.com/cala/icon.ico",
 	html_root_url = "http://plopgrizzly.com/cala/"
 )]
 

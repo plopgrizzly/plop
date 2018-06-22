@@ -6,10 +6,11 @@
 // (See accompanying file LICENSE_1_0.txt or copy at
 // https://www.boost.org/LICENSE_1_0.txt)
 
-/// acceleration due to spring dampering.
-pub fn acceleration(x: f32, v: f32, _t: f32) -> f32 {
-	let k: f32 = 15.0;
-	let b: f32 = 0.1;
-
-	return -k * x - b * v;
-}
+// Import adi_screen macros.
+pub use adi_screen::prelude::*;
+pub use adi_screen::*;
+pub use Input::*;
+pub use Input;
+pub use World;
+pub use BBox;
+pub use Object;

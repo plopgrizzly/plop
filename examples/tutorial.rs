@@ -1,108 +1,89 @@
-// "rust_physics_engine" crate - Licensed under the MIT LICENSE
-//  * Copyright (c) 2018  Jeron A. Lau <jeron.lau@plopgrizzly.com>
-//  * Copyright (c) 2018  Brandon Ly <wowbob396@gmail.com>
+// The Cala Physics Engine
+//
+// Copyright Jeron A. Lau 2018.
+// Copyright Brandon Ly 2018.
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE_1_0.txt or copy at
+// https://www.boost.org/LICENSE_1_0.txt)
 
-extern crate rust_physics_engine;
+#[macro_use] extern crate cala;
 extern crate aci_png;
-#[macro_use]
-extern crate adi_screen;
-
-use rust_physics_engine::{
-	Window,
-};
-
-use adi_screen::{
-	Input, Transform, Text, Sprite
-};
 
 use std::f32::consts::PI;
+use cala::prelude::*;
+use cala::{ World, Object };
 
 const MOVE_SPEED : f32 = 6.0;
-const LOOK_SPEED : f32 = 0.1;
+const LOOK_SPEED : f32 = 0.2 * PI;
 
 struct Context {
-	// Window
-	window: Window,
+	// The World Space
+	world: World,
 	// Camera position and rotation state
-	pos: (f32, f32, f32),
-	rot: (f32, f32, f32),
-	// Testing Text
-	text: Text,
+	pos: Vec3,
+	rot: Vec3,
 	// The sprites in the world
-	sprites: [Sprite; 2],
-	// Rotation of the box
-	box_r: f32,
-	// Falling box y
-	box_y: f32,
+	falling: Object,
+	rotator: Object,
 }
 
 fn read_input(context: &mut Context, input: Input) -> bool {
-	let t = context.window.window().since();
+	let t = context.world.since();
 
 	match input {
-		Input::Back | Input::Quit => return true,
-		Input::W(Some(_)) => {
-			let x = f32::sin(-2.0 * PI * context.rot.1) * t * MOVE_SPEED;
-			let z = f32::cos(-2.0 * PI * context.rot.1) * t * MOVE_SPEED;
-			context.pos.0 += x;
-			context.pos.2 += z;
-			context.window.window().camera(context.pos, context.rot);
+		Back | Quit => return true,
+		W(Some(_)) => {
+			let x = f32::sin(-context.rot.y) * t * MOVE_SPEED;
+			let z = f32::cos(-context.rot.y) * t * MOVE_SPEED;
+			context.pos.x += x;
+			context.pos.z += z;
+			context.world.camera(context.pos, context.rot);
 		}
-		Input::S(Some(_)) => {
-			let x = f32::sin(-2.0 * PI * context.rot.1) * -t * MOVE_SPEED;
-			let z = f32::cos(-2.0 * PI * context.rot.1) * -t * MOVE_SPEED;
-			context.pos.0 += x;
-			context.pos.2 += z;
-			context.window.window().camera(context.pos, context.rot);
+		S(Some(_)) => {
+			let x = f32::sin(-context.rot.y) * -t * MOVE_SPEED;
+			let z = f32::cos(-context.rot.y) * -t * MOVE_SPEED;
+			context.pos.x += x;
+			context.pos.z += z;
+			context.world.camera(context.pos, context.rot);
 		}
-		Input::D(Some(_)) => {
-			let x = f32::sin(-2.0 * PI * (context.rot.1 - 0.25)) * t * MOVE_SPEED;
-			let z = f32::cos(-2.0 * PI * (context.rot.1 - 0.25)) * t * MOVE_SPEED;
-			context.pos.0 += x;
-			context.pos.2 += z;
-			context.window.window().camera(context.pos, context.rot);
+		D(Some(_)) => {
+			let x = f32::sin(-(context.rot.y - (0.5 * PI))) * t * MOVE_SPEED;
+			let z = f32::cos(-(context.rot.y - (0.5 * PI))) * t * MOVE_SPEED;
+			context.pos.x += x;
+			context.pos.z += z;
+			context.world.camera(context.pos, context.rot);
 		}
-		Input::A(Some(_)) => {
-			let x = f32::sin(-2.0 * PI * (context.rot.1 + 0.25)) * t * MOVE_SPEED;
-			let z = f32::cos(-2.0 * PI * (context.rot.1 + 0.25)) * t * MOVE_SPEED;
-			context.pos.0 += x;
-			context.pos.2 += z;
-			context.window.window().camera(context.pos, context.rot);
+		A(Some(_)) => {
+			let x = f32::sin(-(context.rot.y + (0.5 * PI))) * t * MOVE_SPEED;
+			let z = f32::cos(-(context.rot.y + (0.5 * PI))) * t * MOVE_SPEED;
+			context.pos.x += x;
+			context.pos.z += z;
+			context.world.camera(context.pos, context.rot);
 		}
-		Input::Space(Some(_)) => {
-			context.pos.1 -= t * MOVE_SPEED;
-			context.window.window().camera(context.pos, context.rot);
+		Space(Some(_)) => {
+			context.pos.y -= t * MOVE_SPEED;
+			context.world.camera(context.pos, context.rot);
 		}
-		Input::LShift(Some(_)) | Input::RShift(Some(_)) => {
-			context.pos.1 += t * MOVE_SPEED;
-			context.window.window().camera(context.pos, context.rot);
+		LShift(Some(_)) | RShift(Some(_)) => {
+			context.pos.y += t * MOVE_SPEED;
+			context.world.camera(context.pos, context.rot);
 		}
-		Input::Q(Some(_)) => {
-			context.rot.1 += t * LOOK_SPEED;
-			context.window.window().camera(context.pos, context.rot);
+		Q(Some(_)) => {
+			context.rot.y += t * LOOK_SPEED;
+			context.world.camera(context.pos, context.rot);
 		}
-		Input::E(Some(_)) => {
-			context.rot.1 -= t * LOOK_SPEED;
-			context.window.window().camera(context.pos, context.rot);
+		E(Some(_)) => {
+			context.rot.y -= t * LOOK_SPEED;
+			context.world.camera(context.pos, context.rot);
 		}
-		Input::R(Some(_)) => {
-			context.box_r += t * LOOK_SPEED;
-			Transform::new()
-				.rotate(context.box_r, 0.0, 0.0)
-				.translate(0.0, -0.5, 2.0)
-				.apply(&mut context.window.window(),
-					&mut context.sprites[0]);
+		R(Some(_)) => {
+			context.rotator.update(t);
 		}
-		Input::F(Some(_)) => {
-			context.box_y += t * MOVE_SPEED / 4.0;
-			Transform::new()
-				.translate(0.0, context.box_y, 2.0)
-				.apply(&mut context.window.window(),
-					&mut context.sprites[1]);
+		F(Some(_)) => {
+			context.falling.update(t);
 		}
-		Input::Resize => {
-			context.text.update(context.window.window(), "Test", None);
-//				"Physics Test\n", None);
+		Resize => {
+			// TODO: resize GUIS
 		}
 		_ => {},
 	}
@@ -111,34 +92,46 @@ fn read_input(context: &mut Context, input: Input) -> bool {
 }
 
 fn main() {
-	let mut window = rust_physics_engine::Window::new();
-
-	textures!(window.window(), aci_png::decode,
+	let mut world = World::new();
+	set_textures!(world, aci_png::decode,
 		"res/box.png",
 		"res/ball.png"
 	);
-	
-	models!(window.window(), "res/block.data");
+	set_models!(world, "res/block.data");
 
-	let sprites = sprites!(window.window(),
-			(0/*block model*/, Some(0/*box tex*/),
-		Transform::new().translate(0.0, -0.5, 2.0), false),
-			(0/*block model*/, Some(0/*box tex*/),
-		Transform::new().translate(0.0, -4.5, 2.0), false));
+	// Rotating object
+	let mut rotator = add!(&mut world, 1.0,
+		BBox::new(
+			vec3!(-0.5, -0.5, -0.5),
+			vec3!(0.5, 0.5, 0.5),
+		),
+		vec3!(0.0, -0.5, 2.0),
+		vec3!(0.0, 0.0, 0.0),
+		(0/*block model*/, Some(0/*box tex*/), false));
+	rotator.apply_spin(vec3!(0.0, -0.2 * PI, 0.0)); // Add rotation.
+
+	// Falling object
+	let mut falling = add!(world, 1.0,
+		BBox::new(
+			vec3!(-0.5, -0.5, -0.5),
+			vec3!(0.5, 0.5, 0.5),
+		),
+		vec3!(0.0, -4.5, 2.0),
+		vec3!(0.0, 0.0, 0.0),
+		(0/*block model*/, Some(0/*box tex*/), false));
+	falling.apply_gravity(); // Add the force of gravity to this object.
 
 	let mut context = Context {
-		text: Text::new(&mut window.window(), (-1.0, -1.0), (0.25, 0.125)),
-		window: window,
-		pos: (0.0, 0.0, 0.0),
-		rot: (0.0, 0.0, 0.0),
-		sprites,
-		box_r: 0.0,
-		box_y: -4.5,
+		world,
+		pos: vec3!(0.0, 0.0, 0.0),
+		rot: vec3!(0.0, 0.0, 0.0),
+		falling,
+		rotator,
 	};
 
 	'program: loop {
 		// Go through this frame's input.
-		while let Some(input) = context.window.window().update() {
+		while let Some(input) = context.world.update() {
 			if read_input(&mut context, input) {
 				break 'program;
 			}

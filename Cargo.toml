@@ -1,15 +1,39 @@
-# "rust_physics_engine" crate - Licensed under the MIT LICENSE
-#  * Copyright (c) 2018  Jeron A. Lau <jeron.lau@plopgrizzly.com>
-#  * Copyright (c) 2018  Brandon Ly <wowbob396@gmail.com>
+# The Cala Physics Engine
+#                             _        _
+#                            /@\——————/@\
+# .———  .                   |   o    o   |     .————      .            .
+# |   | |  .———   .———   .——.     []     .——.  |      .——    ———: ———: | .   .
+# |   | |  |   |  |   |  \   \   <##>   /   /  |      |   |    /    /  | |   |
+# |———  |  |   |  |   |   |   ¯        ¯   |   |   -- |   |   /    /   |  \ /
+# |     |  |   |  |———    |                |   |    | |   |  /    /    |   |
+# |     |   ———   |       |                |    ————  |   | :——— :———  |   |
+#                 |        \              /                              __/
+#                           ¯————————————¯
+#
+# Copyright Jeron A. Lau 2018.
+# Copyright Brandon Ly 2018.
+# Distributed under the Boost Software License, Version 1.0.
+# (See accompanying file LICENSE_1_0.txt or copy at
+# https://www.boost.org/LICENSE_1_0.txt)
 
 [package]
-name = "rust_physics_engine"
-version = "0.1.0"
+name = "cala"
+version = "0.0.1"
 authors = [
 	"Brandon Ly <wowbob396@gmail.com>",
 	"Jeron A. Lau <jeron.lau@plopgrizzly.com>"
 ]
+license = "BSL-1.0"
+documentation = "https://docs.rs/cala"
+homepage = "https://plopgrizzly.com/cala"
+repository = "https://github.com/plopgrizzly/cala"
+readme = "readme.md"
+description = "Physics engine with render support in pure Rust."
+keywords = ["graphics", "rendering", "physics", "simulation"]
+categories = ["game-engines", "visualization", "rendering::engine",
+	"algorithms", "simulation"]
 
 [dependencies]
-adi_screen = "^0.8"
-aci_png = "^0.6"
+adi_screen = "0.11"
+aci_png = "0.6"
+ami = "0.10"

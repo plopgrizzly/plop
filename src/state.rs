@@ -1,6 +1,10 @@
-// "rust_physics_engine" crate - Licensed under the MIT LICENSE
-//  * Copyright (c) 2018  Jeron A. Lau <jeron.lau@plopgrizzly.com>
-//  * Copyright (c) 2018  Brandon Ly <wowbob396@gmail.com>
+// The Cala Physics Engine
+//
+// Copyright Jeron A. Lau 2018.
+// Copyright Brandon Ly 2018.
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE_1_0.txt or copy at
+// https://www.boost.org/LICENSE_1_0.txt)
 
 use kinematics;
 use Derivative;
@@ -8,8 +12,10 @@ use Derivative;
 /// This struct will be used to store the position and velocity of the state
 /// values for the RK4 approach
 pub struct State {
-	pub x: f32, // position
-	pub dx: f32, // velocity
+	/// Position
+	pub x: f32,
+	/// Velocity
+	pub dx: f32,
 }
 
 impl State {

@@ -1,10 +1,16 @@
-// "rust_physics_engine" crate - Licensed under the MIT LICENSE
-//  * Copyright (c) 2018  Jeron A. Lau <jeron.lau@plopgrizzly.com>
-//  * Copyright (c) 2018  Brandon Ly <wowbob396@gmail.com>
+// The Cala Physics Engine
+//
+// Copyright Jeron A. Lau 2018.
+// Copyright Brandon Ly 2018.
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE_1_0.txt or copy at
+// https://www.boost.org/LICENSE_1_0.txt)
 
 /// This struct will be used to store the derivatives of position and velocity
 /// of for the RK4 approach
 pub struct Derivative {
-	pub dx: f32, // velocity
-	pub dv: f32, // acceleration
+	/// Velocity
+	pub dx: f32,
+	/// Acceleration
+	pub dv: f32,
 }

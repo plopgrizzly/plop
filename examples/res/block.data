@@ -11,8 +11,8 @@ model::new() // Start building the model.
 	[0.5, 0.5, -0.5, 1.0], // 17
 	[0.5, -0.5, -0.5, 1.0], // 22
 ]).f()
-.m(IDENTITY.rotate(0.25, 0.0, 0.0)).f() // Top
-.m(IDENTITY.rotate(0.50, 0.0, 0.0)).f() // Back
-.m(IDENTITY.rotate(0.75, 0.0, 0.0)).f() // Bottom
-.m(IDENTITY.rotate(0.0, 0.25, 0.0)).f() // Right
-.m(IDENTITY.rotate(0.0, 0.75, 0.0)).f() // Left
+.m(IDENTITY.r(vec3!(0.5 * PI, 0.0, 0.0))).f() // Top
+.m(IDENTITY.r(vec3!(1.0 * PI, 0.0, 0.0))).f() // Back
+.m(IDENTITY.r(vec3!(1.5 * PI, 0.0, 0.0))).f() // Bottom
+.m(IDENTITY.r(vec3!(0.0, 0.5 * PI, 0.0))).f() // Right
+.m(IDENTITY.r(vec3!(0.0, 1.5 * PI, 0.0))).f() // Left

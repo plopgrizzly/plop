@@ -18,7 +18,6 @@
 extern crate aci_png; // For loading default icon
 extern crate adi_screen; // For creating a window and drawing
 extern crate ami; // For octree
-extern crate euler;
 
 mod world;
 mod derivative;

@@ -20,5 +20,11 @@ struct Particle {
     // holds the linear velocity of the particle
     velocity: Vec3;
 
-    // holds the accer
+    // holds the acceration of the particle
+    acceleration: Vec3;
+
+    // holds the damping applied to linear motion
+    // damping is required to remove energy added through
+    // numerical instability in the integrator
+    damping : f32;
 }

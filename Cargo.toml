@@ -15,7 +15,7 @@
 
 [package]
 name = "cala"
-version = "0.0.1"
+version = "0.0.2"
 authors = [
 	"Brandon Ly <wowbob396@gmail.com>",
 	"Jeron A. Lau <jeron.lau@plopgrizzly.com>"
@@ -31,13 +31,6 @@ categories = ["game-engines", "visualization", "rendering::engine",
 	"algorithms", "simulation"]
 
 [dependencies]
-adi_screen = { path = "../adi_screen" } # "0.11"
+adi_screen = "0.12"
 aci_png = "0.7"
 ami = "0.12"
-
-[replace]
-"adi_gpu:0.10.0" = { path = "../adi_gpu" }
-"adi_gpu_opengl:0.7.0" = { path = "../adi_gpu_opengl" }
-"adi_gpu_vulkan:0.8.0" = { path = "../adi_gpu_vulkan" }
-"adi_gpu_base:0.9.0" = { path = "../adi_gpu_base" }
-"awi:0.7.1" = { path = "../awi" }

@@ -1,15 +1,12 @@
-// The Cala Physics Engine
-//
-// Copyright Jeron A. Lau 2018.
 // Copyright Brandon Ly 2018.
-// Distributed under the Boost Software License, Version 1.0.
-// (See accompanying file LICENSE_1_0.txt or copy at
+// Copyright Jeron A. Lau 2018.
+// Dual-licensed under either the MIT License or the Boost Software License,
+// Version 1.0.  (See accompanying file LICENSE_1_0.txt or copy at
 // https://www.boost.org/LICENSE_1_0.txt)
 
 use std::rc::Rc;
 use std::cell::{ RefCell, RefMut };
 
-use aci_png;
 use ami::{ Octree, Id };
 use adi_screen::{ Window, WindowBuilder, Sprite };
 use RigidBody;
@@ -85,16 +82,6 @@ pub struct Overlay {
 	} }
 }
 
-/// Macro to create multiple non-camera affected sprites in an array.
-/// # Example
-/// See [`add!()`](macro.add.html)
-#[macro_export] macro_rules! add_gui {
-	($world:expr, $( $x:expr ),*) => { {
-		let sprite: Sprite = sprites_gui!(&mut $world.window().window, $($x),*)[0];
-		$world.overlay(sprite)
-	} }
-}
-
 /// Macro to load textures from files for the window.
 ///
 /// The first texture file listed is indexed 0, and each subsequent texture
@@ -118,8 +105,8 @@ pub struct Overlay {
 }
 
 #[doc(hidden)]
-pub struct WorldData {
-	pub window: Window,
+pub struct WorldData<'a> {
+	pub window: Window<'a>,
 	octree: Octree<RigidBody>,
 }
 
@@ -127,7 +114,6 @@ pub struct WorldData {
 pub struct WorldBuilder {
 	name: String,
 	bgc: Vec3,
-	icon: Option<Graphic>,
 	fog: Option<(f32, f32)>,
 }
 
@@ -137,7 +123,6 @@ impl WorldBuilder {
 		WorldBuilder {
 			name: "Cala Program".to_string(),
 			bgc: vec3!(0.1, 0.1, 0.1),
-			icon: None,
 			fog: None,
 		}
 	}
@@ -154,12 +139,6 @@ impl WorldBuilder {
 		self
 	}
 
-	/// Set the window icon
-	pub fn icon(mut self, icon: Graphic) -> Self {
-		self.icon = Some(icon);
-		self
-	}
-
 	/// Set the fog, default is off.
 	pub fn fog(mut self, fog: (f32, f32)) -> Self {
 		self.fog = Some(fog);
@@ -167,14 +146,8 @@ impl WorldBuilder {
 	}
 
 	/// Create the World and open a window.
-	pub fn finish(mut self) -> World {
-		if self.icon.is_none() {
-			let icon = aci_png::decode(
-				include_bytes!("../icon.png")).unwrap();
-			self.icon = Some(icon);
-		}
-
-		let mut window = WindowBuilder::new(&self.name, self.icon)
+	pub fn finish(self) -> World {
+		let mut window = WindowBuilder::new(&self.name, None)
 			.background(self.bgc.x, self.bgc.y, self.bgc.z);
 
 		if let Some(fog) = self.fog {
@@ -189,7 +162,7 @@ impl WorldBuilder {
 }
 
 /// The 3D world space.
-#[derive(Clone)] pub struct World(Rc<RefCell<WorldData>>);
+#[derive(Clone)] pub struct World(Rc<RefCell<WorldData<'static>>>);
 
 impl World {
 	/// Change the camera position.
@@ -220,12 +193,17 @@ impl World {
 	}
 
 	/// Get the underlying adi_screen `Window`
-	pub fn window(&mut self) -> RefMut<WorldData> {
+	pub fn window(&mut self) -> RefMut<WorldData<'static>> {
 		self.0.borrow_mut()
 	}
 
 	/// Update the display and get the input.
 	pub fn update(&mut self) -> Option<::adi_screen::Input> {
 		self.window().window.update()
+	}
+
+	/// Add widget
+	pub fn widget(&mut self, pos: &[(u8,u8)], widget: Widget<'static>) {
+		self.window().window.widget(pos, widget);
 	}
 }

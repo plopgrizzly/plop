@@ -1,20 +1,17 @@
-# The Cala Physics Engine
-#                             _        _
-#                            /@\——————/@\
-# .———  .                   |   o    o   |     .————      .            .
-# |   | |  .———   .———   .——.     []     .——.  |      .——    ———: ———: | .   .
-# |   | |  |   |  |   |  \   \   <##>   /   /  |      |   |    /    /  | |   |
-# |———  |  |   |  |   |   |   ¯        ¯   |   |   -- |   |   /    /   |  \ /
-# |     |  |   |  |———    |                |   |    | |   |  /    /    |   |
-# |     |   ———   |       |                |    ————  |   | :——— :———  |   |
-#                 |        \              /                              __/
-#                           ¯————————————¯
-#
-# Copyright Jeron A. Lau 2018.
 # Copyright Brandon Ly 2018.
-# Distributed under the Boost Software License, Version 1.0.
-# (See accompanying file LICENSE_1_0.txt or copy at
+# Copyright Jeron A. Lau 2018.
+# Dual-licensed under either the MIT License or the Boost Software License,
+# Version 1.0.  (See accompanying file LICENSE_1_0.txt or copy at
 # https://www.boost.org/LICENSE_1_0.txt)
+#
+# XXXX  X                    /5\——————/5\       XXXX      X           X
+# X   X X   XXX   XXXX      |   0    0   |     X      XXX   XXXX XXXX X X   X
+# X   X X  X   X  X   X  /"\|     <>     |/"\  X      X   X    X    X X X   X
+# XXXX  X  X   X  X   X  \  \\_  ====  _//  /  X   XX X   X   X    X  X  X X
+# X     X  X   X  XXXX    \_              _/   X    X X   X  X    X   X   X
+# X     X   XXX   X       / \            / \    XXXX  X   X XXXX XXXX X   X
+#                 X       \                /                            XX
+#                          --____________--
 
 [package]
 name = "cala"
@@ -23,17 +20,24 @@ authors = [
 	"Brandon Ly <wowbob396@gmail.com>",
 	"Jeron A. Lau <jeron.lau@plopgrizzly.com>"
 ]
-license = "BSL-1.0"
+license = "MIT / BSL-1.0"
 documentation = "https://docs.rs/cala"
 homepage = "https://plopgrizzly.com/cala"
 repository = "https://github.com/plopgrizzly/cala"
-readme = "readme.md"
-description = "Physics engine with render support in pure Rust."
+readme = "README.md"
+description = "(Science / Video Game) Physics engine with render support"
 keywords = ["graphics", "rendering", "physics", "simulation"]
 categories = ["game-engines", "visualization", "rendering::engine",
 	"algorithms", "simulation"]
 
 [dependencies]
-adi_screen = "0.11"
-aci_png = "0.6"
-ami = "0.10"
+adi_screen = { path = "../adi_screen" } # "0.11"
+aci_png = "0.7"
+ami = "0.12"
+
+[replace]
+"adi_gpu:0.10.0" = { path = "../adi_gpu" }
+"adi_gpu_opengl:0.7.0" = { path = "../adi_gpu_opengl" }
+"adi_gpu_vulkan:0.8.0" = { path = "../adi_gpu_vulkan" }
+"adi_gpu_base:0.9.0" = { path = "../adi_gpu_base" }
+"awi:0.7.1" = { path = "../awi" }

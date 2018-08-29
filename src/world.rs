@@ -8,7 +8,7 @@ use std::rc::Rc;
 use std::cell::{ RefCell, RefMut };
 
 use ami::{ Octree, Id };
-use adi_screen::{ Window, WindowBuilder, Sprite };
+use adi_screen::{ Screen, Sprite };
 use RigidBody;
 use BBox;
 use prelude::*;
@@ -46,109 +46,16 @@ impl Object {
 	}
 }
 
-/// A 2D GUI element.
-pub struct Overlay {
-	#[allow(unused)] // TODO
-	sprite: Sprite,
-}
-
-/// Add a collection of sprites as a RigidBody to the world.
-#[macro_export] macro_rules! add {
-	($world:expr, $mass:expr, $bbox:expr, $pos:expr, $rot:expr,
-		$( $x:expr ),*) =>
-	{ {
-		let t = $crate::Transform::IDENTITY.rt($rot, $pos);
-		let sprites: Box<[$crate::Sprite]>
-			= Box::new(sprites!(&mut $world.window().window,
-				$(($x.0, $x.1, t.clone(), $x.2)),*));
-		let sprites = sprites.into_vec();
-		$world.add($mass, $bbox, sprites, $pos, $rot)
-	} }
-}
-
-/// Macro to create multiple fog-affected sprites in an array.
-/// # Example
-/// See [`add!()`](macro.add.html)
-#[macro_export] macro_rules! add_fog {
-	($world:expr, $mass:expr, $bbox:expr, $pos:expr, $rot:expr,
-		$( $x:expr ),*) =>
-	{ {
-		let t = $crate::Transform::IDENTITY.rt($rot, $pos);
-		let sprites: Box<[Sprite]>
-			= Box::new(sprites_fog!(&mut $world.window().window,
-				$(($x.0, $x.1, t.clone(), $x.2)),*));
-		let sprites = sprites.into_vec();
-		$world.add($mass, $bbox, sprites, $pos, $rot)
-	} }
-}
-
-/// Macro to load textures from files for the window.
-///
-/// The first texture file listed is indexed 0, and each subsequent texture
-/// increases by 1.  See: [`add!()`](macro.add.html) for example.
-#[macro_export] macro_rules! set_textures {
-	($world:expr, $decode:expr, $( $x:expr ),*) => { {
-		let window = &mut $world.window().window;
-		textures!(window, $decode, $($x),*)
-	} }
-}
-
-/// Macro to load models from files for the window.
-///
-/// The first model file listed is indexed 0, and each subsequent model
-/// increases by 1.  See: [`add!()`](macro.add.html) for example.
-#[macro_export] macro_rules! set_models {
-	($world:expr, $( $x:expr ),*) => { {
-		let window = &mut $world.window().window;
-		models!(window, $($x),*)
-	} }
-}
-
 #[doc(hidden)]
 pub struct WorldData<'a> {
-	pub window: Window<'a>,
 	octree: Octree<RigidBody>,
 }
 
-/// Builder for World
-pub struct WorldBuilder {
-	name: String,
-	bgc: Vec3,
-	fog: Option<(f32, f32)>,
-}
-
 impl WorldBuilder {
-	/// Create a new WorldBuilder.
-	pub fn new() -> Self {
-		WorldBuilder {
-			name: "Cala Program".to_string(),
-			bgc: vec3!(0.1, 0.1, 0.1),
-			fog: None,
-		}
-	}
-
-	/// Set the window name.
-	pub fn name(mut self, name: &str) -> Self {
-		self.name = name.to_string();
-		self
-	}
-
-	/// Set the background color.
-	pub fn background(mut self, color: Vec3) -> Self {
-		self.bgc = color;
-		self
-	}
-
-	/// Set the fog, default is off.
-	pub fn fog(mut self, fog: (f32, f32)) -> Self {
-		self.fog = Some(fog);
-		self
-	}
-
 	/// Create the World and open a window.
 	pub fn finish(self) -> World {
-		let mut window = WindowBuilder::new(&self.name, None)
-			.background(self.bgc.x, self.bgc.y, self.bgc.z);
+		let mut window = WindowBuilder::new()
+			.background((self.bgc[0], self.bgc[1], self.bgc[2]));
 
 		if let Some(fog) = self.fog {
 			window = window.fog(fog.0, fog.1);
@@ -157,53 +64,17 @@ impl WorldBuilder {
 		let window = window.finish();
 		let octree = Octree::new();
 
-		World(Rc::new(RefCell::new(WorldData { window, octree })))
+		World()
 	}
 }
 
 /// The 3D world space.
-#[derive(Clone)] pub struct World(Rc<RefCell<WorldData<'static>>>);
+#[derive(Clone)] pub struct World {
+	world: Rc<RefCell<WorldData<'static>>>,
+}
 
 impl World {
-	/// Change the camera position.
-	pub fn camera(&mut self, pos: Vec3, rot: Vec3) {
-		self.window().window.camera(pos, rot);
-	}
-
-	/// Get the number of seconds since the previous frame.
-	pub fn since(&mut self) -> f32 {
-		self.window().window.since()
-	}
-
-	#[doc(hidden)]
-	pub fn add(&mut self, mass: f32, bbox: BBox, sprites: Vec<Sprite>,
-		position: Vec3, rotation: Vec3) -> Object
-	{
-		Object {
-			world: self.clone(),
-			id: (*self.0.borrow_mut()).octree
-				.add(RigidBody::new(mass, bbox, sprites,
-					position, rotation))
-		}
-	}
-
-	#[doc(hidden)]
-	pub fn overlay(sprite: Sprite) -> Overlay {
-		Overlay { sprite }
-	}
-
-	/// Get the underlying adi_screen `Window`
-	pub fn window(&mut self) -> RefMut<WorldData<'static>> {
-		self.0.borrow_mut()
-	}
-
-	/// Update the display and get the input.
-	pub fn update(&mut self) -> Option<::adi_screen::Input> {
-		self.window().window.update()
-	}
-
-	/// Add widget
-	pub fn widget(&mut self, pos: &[(u8,u8)], widget: Widget<'static>) {
-		self.window().window.widget(pos, widget);
+	pub fn new() -> World {
+		
 	}
 }

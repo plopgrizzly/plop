@@ -5,11 +5,9 @@
 // https://www.boost.org/LICENSE_1_0.txt)
 
 // Import adi_screen macros.
-pub use adi_screen::prelude::*;
+pub use ami::prelude::*;
 pub use adi_screen::*;
-pub use Input::*;
-pub use Input;
-pub use World;
-pub use WorldBuilder;
+pub use adi_screen::prelude::*;
+pub use Event::*;
+pub use Event;
 pub use BBox;
-pub use Object;

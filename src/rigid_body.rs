@@ -6,7 +6,6 @@
 
 use prelude::*;
 use ami::{ BBox, Collider };
-use adi_screen::{ Window, Sprite, Transform };
 
 use constants;
 
@@ -16,7 +15,6 @@ pub struct RigidBody {
 	mass: f32,
 	force: Vec3, // (fx, fy, fz)
 	spin: Vec3, // (rx, ry, rz)
-	sprites: Vec<Sprite>,
 	bbox: BBox,
 	position: Vec3,
 	rotation: Vec3,
@@ -30,11 +28,11 @@ impl Collider for RigidBody {
 
 impl RigidBody {
 	/// Create a new RigidBody.
-	pub(crate) fn new(mass: f32, bbox: BBox, sprites: Vec<Sprite>,
-		position: Vec3, rotation: Vec3) -> Self
+	pub(crate) fn new(mass: f32, bbox: BBox, position: Vec3, rotation: Vec3)
+		-> Self
 	{
 		RigidBody {
-			mass, force: Vec3::new(0.0, 0.0, 0.0), sprites, bbox,
+			mass, force: Vec3::new(0.0, 0.0, 0.0), bbox,
 			position, spin: Vec3::new(0.0, 0.0, 0.0), rotation
 		}
 	}
@@ -56,7 +54,7 @@ impl RigidBody {
 	}
 
 	/// Move `RigidBody` based on applied forces for a set period of time.
-	pub fn update(&mut self, window: &mut Window, time: f32) {
+	pub fn update(&mut self, time: f32) {
 		self.position.x += self.force.x * time;
 		self.position.y += self.force.y * time;
 		self.position.z += self.force.z * time;
@@ -66,9 +64,5 @@ impl RigidBody {
 		self.rotation.z += self.spin.z * time;
 
 		let t = Transform::IDENTITY.rt(self.rotation,self.position);
-
-		for sprite in &self.sprites {
-			sprite.transform(window, t);
-		}
 	}
 }

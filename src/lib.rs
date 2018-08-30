@@ -14,7 +14,7 @@
 )]
 
 extern crate aci_png; // For loading default icon
-extern crate adi_screen; // For creating a window and drawing
+#[macro_use]
 extern crate ami; // For octree
 
 // mod world;
@@ -22,19 +22,17 @@ mod derivative;
 mod rigid_body;
 mod state;
 mod kinematics;
+mod mass;
 
-#[doc(hidden)]
+/// Prelude module.
 pub mod prelude;
 
-pub use adi_screen::{ Transform, Event };
 pub use ami::{ BBox };
 // pub use world::{ World, Object };
 pub use derivative::Derivative;
 pub use rigid_body::RigidBody;
 pub use state::State;
-
-#[doc(hidden)]
-pub use adi_screen::Shape;
+pub use mass::Mass;
 
 mod constants {
 	pub const GRAVITY: f32 = 9.81;

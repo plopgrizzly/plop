@@ -6,7 +6,6 @@
 
 use prelude::*;
 use ami::{ BBox, Collider };
-use adi_screen::{ Window, Sprite, Transform };
 use euler;
 use constants;
 

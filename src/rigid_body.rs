@@ -5,19 +5,19 @@
 // https://www.boost.org/LICENSE_1_0.txt)
 
 use prelude::*;
-use ami::{ BBox, Collider };
+use ami::*;
 
 use constants;
 
 /// The structure that represents physical objects in the gameworld.
 pub struct RigidBody {
 	#[allow(unused)] // TODO
-	mass: f32,
-	force: Vec3, // (fx, fy, fz)
-	spin: Vec3, // (rx, ry, rz)
+	mass: Mass,
+	force: Vector, // position step (fx, fy, fz)
+	spin: Rotation, // rotation step (quaternion)
 	bbox: BBox,
-	position: Vec3,
-	rotation: Vec3,
+	position: Vector, // XYZ 3D position
+	rotation: Rotation, // quaternion rotation
 }
 
 impl Collider for RigidBody {
@@ -26,43 +26,51 @@ impl Collider for RigidBody {
 	}
 }
 
+// TODO: Add Friction Functions.
 impl RigidBody {
 	/// Create a new RigidBody.
-	pub(crate) fn new(mass: f32, bbox: BBox, position: Vec3, rotation: Vec3)
-		-> Self
+	pub fn new(mass: Mass, bbox: BBox, position: Vector,
+		rotation: Rotation) -> Self
 	{
 		RigidBody {
-			mass, force: Vec3::new(0.0, 0.0, 0.0), bbox,
-			position, spin: Vec3::new(0.0, 0.0, 0.0), rotation
+			mass, force: vector!(), bbox, position,
+			spin: Rotation::identity(), rotation,
 		}
 	}
 
 	/// This method specifically applies the force of gravity to a given
 	/// `RigidBody`
 	pub fn apply_gravity(&mut self) {
-		self.apply_force(Vec3{ x:0.0, y:constants::GRAVITY, z:0.0 });
+		self.apply_force(Vector{ x:0.0, y:constants::GRAVITY, z:0.0 });
 	}
 
 	/// Apply a force vector to this `RigidBody`.
-	pub fn apply_force(&mut self, force: Vec3) {
+	pub fn apply_force(&mut self, force: Vector) {
 		self.force += force;
 	}
 
-	/// Apply a spin vector to this `RigidBody`.
-	pub fn apply_spin(&mut self, spin: Vec3) {
-		self.spin += spin;
+	/// Add a spin to this `RigidBody`.
+	pub fn apply_spin(&mut self, spin: Rotation) {
+		self.spin = self.spin.then(spin);
+	}
+
+	/// Stop forces on this `RigidBody`.
+	pub fn stop_force(&mut self) {
+		self.force = vector!();
+	}
+
+	/// Stop spins on this `RigidBody`.
+	pub fn stop_spin(&mut self) {
+		self.spin = Rotation::identity();
 	}
 
 	/// Move `RigidBody` based on applied forces for a set period of time.
-	pub fn update(&mut self, time: f32) {
-		self.position.x += self.force.x * time;
-		self.position.y += self.force.y * time;
-		self.position.z += self.force.z * time;
+	///
+	/// Returns a transformation Matrix for visualization.
+	pub fn update(&mut self, time: f32) -> Matrix {
+		self.position += self.force * time;
+		self.rotation.then(self.spin * time);
 
-		self.rotation.x += self.spin.x * time;
-		self.rotation.y += self.spin.y * time;
-		self.rotation.z += self.spin.z * time;
-
-		let t = Transform::IDENTITY.rt(self.rotation,self.position);
+		matrix!().rt(self.rotation,self.position)
 	}
 }

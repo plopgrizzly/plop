@@ -25,12 +25,14 @@ documentation = "https://docs.rs/cala"
 homepage = "https://plopgrizzly.com/cala"
 repository = "https://github.com/plopgrizzly/cala"
 readme = "README.md"
-description = "(Science / Video Game) Physics engine with render support"
+description = "(Science / Video Game) Physics engine for ADI"
 keywords = ["graphics", "rendering", "physics", "simulation"]
 categories = ["game-engines", "visualization", "rendering::engine",
 	"algorithms", "simulation"]
 
 [dependencies]
-adi_screen = "0.12"
 aci_png = "0.7"
-ami = "0.12"
+ami = { path = "../ami" } # "0.12"
+
+[dev-dependencies]
+adi = { path = "../adi", version = "0.12", features = ["screen"] }

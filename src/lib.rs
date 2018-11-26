@@ -14,7 +14,6 @@
 )]
 
 extern crate aci_png; // For loading default icon
-#[macro_use]
 extern crate ami; // For octree
 
 // mod world;

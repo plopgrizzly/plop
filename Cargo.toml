@@ -15,7 +15,7 @@
 
 [package]
 name = "cala"
-version = "0.0.2"
+version = "0.0.3-pre0"
 authors = [
 	"Brandon Ly <wowbob396@gmail.com>",
 	"Jeron A. Lau <jeron.lau@plopgrizzly.com>"
@@ -31,8 +31,8 @@ categories = ["game-engines", "visualization", "rendering::engine",
 	"algorithms", "simulation"]
 
 [dependencies]
-aci_png = "0.7"
-ami = { path = "../ami" } # "0.12"
+aci_png = "0.8.0-pre0"
+ami = "0.13"
 
 [dev-dependencies]
 adi = { path = "../adi", version = "0.12", features = ["screen"] }

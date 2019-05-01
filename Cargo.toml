@@ -14,18 +14,18 @@
 #                          --____________--
 
 [package]
-name = "cala"
-version = "0.0.3-pre0"
+name = "plop"
+version = "0.0.1"
 authors = [
 	"Brandon Ly <wowbob396@gmail.com>",
-	"Jeron A. Lau <jeron.lau@plopgrizzly.com>"
+	"Jeron Aldaron Lau <jeronaldaron@gmail.com>"
 ]
 license = "MIT / BSL-1.0"
-documentation = "https://docs.rs/cala"
-homepage = "https://plopgrizzly.com/cala"
-repository = "https://github.com/plopgrizzly/cala"
+documentation = "https://docs.rs/plop"
+homepage = "https://free.plopgrizzly.com/plop"
+repository = "https://github.com/plopgrizzly/plop"
 readme = "README.md"
-description = "(Science / Video Game) Physics engine for ADI"
+description = "(Science / Video Game) Physics engine for Cala"
 keywords = ["graphics", "rendering", "physics", "simulation"]
 categories = ["game-engines", "visualization", "rendering::engine",
 	"algorithms", "simulation"]
@@ -33,6 +33,3 @@ categories = ["game-engines", "visualization", "rendering::engine",
 [dependencies]
 aci_png = "0.8.0-pre0"
 ami = "0.13"
-
-[dev-dependencies]
-adi = { path = "../adi", version = "0.12", features = ["screen"] }

@@ -4,12 +4,12 @@
 // Version 1.0.  (See accompanying file LICENSE_1_0.txt or copy at
 // https://www.boost.org/LICENSE_1_0.txt)
 
-#[macro_use] extern crate cala;
+#[macro_use] extern crate plop;
 extern crate aci_png;
 
 use std::f32::consts::PI;
-use cala::prelude::*;
-use cala::{ World, Object };
+use plop::prelude::*;
+use plop::{ World, Object };
 
 const MOVE_SPEED : f32 = 6.0;
 const LOOK_SPEED : f32 = 0.2 * PI;

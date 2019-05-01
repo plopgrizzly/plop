@@ -1,8 +1,5 @@
-[![Plop Grizzly](https://plopgrizzly.com/images/logo-bar.png)](https://plopgrizzly.com)
-
-# [The Cala Physics Engine](https://crates.io/crates/cala)
-A physics engine written in Rust, uses
-[ADI / Screen](https://crates.io/crates/adi_screen) for graphics.
+# ["Plop": Plop Grizzly Physics Engine](https://crates.io/crates/plop)
+A physics engine written in Rust, meant to be used with [Cala](https://crates.io/crates/cala) for graphics.
 
 ## Features
 * Simulate physics in realtime using ADI to display what's happening.

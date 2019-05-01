@@ -8,9 +8,5 @@ A physics engine written in Rust, meant to be used with [Cala](https://crates.io
 * Lots of stuff (TODO: explain)
 
 ## Change Log
-### 0.0.2
-* Update adi_screen
-* Add widget function for HUD functionality (WIP).
-
 ### 0.0.1
 * Initial release
